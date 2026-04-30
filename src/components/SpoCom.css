@@ -1,0 +1,122 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html, #root {
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  overflow: hidden;
+}
+
+/* This container ensures the dashboard stays centered and doesn't drift left */
+.app-outer-wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Ensure the dashboard matches the screen height exactly */
+.full-dashboard {
+  width: 95vw;
+  height: 90vh; /* Keeps the dashboard fixed to the view height */
+  border: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Prevents the whole page from scrolling */
+}
+
+/* This allows the main section to scroll vertically when albums overflow */
+main.overflow-auto {
+  flex-grow: 1;
+  overflow-y: auto !important;
+}
+
+/* Custom scrollbar to match your black/white aesthetic */
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: #000;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: #fff;
+  border-radius: 10px;
+}
+
+
+.login-card {
+  background: #000;
+  border: 2px solid #fff;
+  width: 400px;
+  padding: 40px;
+  text-align: center;
+}
+
+.img-container {
+  position: relative;
+  overflow: hidden;
+  background: #111;
+}
+
+
+.hover-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.album-item:hover .hover-overlay { opacity: 1; }
+.album-item:hover .grayscale { filter: grayscale(0%); }
+.fw-black { font-weight: 900; letter-spacing: -1.5px; }
+
+.custom-modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.custom-modal { width: 450px; }
+.custom-scroll::-webkit-scrollbar { width: 4px; }
+.custom-scroll::-webkit-scrollbar-thumb { background: #fff; }
+.uppercase { text-transform: uppercase; }
+.italic { font-style: italic; }
+
+/* This allows the container to fill the sidebar and scroll when full */
+.reviews-scroll-area {
+  overflow-y: auto !important;
+  height: 100%; /* Or use flex-grow-1 if inside a flex container */
+}
+
+/* Keeps the headers (Average Score/Title) from being pushed out of view */
+.flex-shrink-0 {
+  flex-shrink: 0;
+}
+
+/* Styling the scrollbar to match your black/white theme */
+.custom-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: #000;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: #fff;
+  border-radius: 10px;
+}
