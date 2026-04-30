@@ -83,7 +83,7 @@ const SpoCom = () => {
     return (
       <div className="app-outer-wrapper d-flex justify-content-center align-items-center bg-black">
         <div className="login-card border-white shadow-lg">
-          <h1 className="text-white fw-black mb-4">ALBUM RECORD SYSTEM</h1>
+          <h4 className="text-white fw-black mb-4">ALBUM RECORD SYSTEM</h4>
           <form onSubmit={handleLogin} className="d-grid gap-2">
             <input type="text" placeholder="Username" className="form-control bg-dark text-white border-secondary" 
               onChange={(e) => setUser({...user, username: e.target.value})} />
