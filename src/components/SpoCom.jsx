@@ -44,17 +44,30 @@ const SpoCom = () => {
 
     const albumEntry = { 
       ...formData, 
-      cover: autoCover, 
-      id: editingId || Date.now() 
+      cover: autoCover,  
     };
 
-    if (editingId) {
-      setAlbums(albums.map(a => a.id === editingId ? albumEntry : a));
+    try {
+    const response = await fetch("https://your-backend-api.com/save", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(albumEntry),
+    });
+
+    if (response.ok) {
+      const savedData = await response.json();
+      // Only update the UI if the database successfully saved the entry
+      setAlbums([...albums, savedData]);
+      closeModal();
     } else {
-      setAlbums([...albums, albumEntry]);
+      alert("Failed to save to database");
     }
-    closeModal();
-  };
+  } catch (error) {
+    console.error("Connection Error:", error);
+  }
+};
 
   const openEdit = (album) => {
     setFormData({ 
