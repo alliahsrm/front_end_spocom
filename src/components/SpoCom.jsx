@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./SpoCom.css";
 
 const SpoCom = () => {
@@ -16,6 +16,18 @@ const SpoCom = () => {
     rating: "", 
     comment: "" 
   });
+
+  const API_URL = "YOUR_DEPLOYED_BACKEND_URL"; // Update this!
+
+  // Fetch data on Login
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetch(`${API_URL}/api/albums`)
+        .then(res => res.json())
+        .then(data => setAlbums(data))
+        .catch(err => console.error("Fetch error:", err));
+    }
+  }, [isLoggedIn]);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -42,48 +54,42 @@ const SpoCom = () => {
       }
     }
 
-    const albumEntry = { 
-      ...formData, 
-      cover: autoCover,  
-    };
+    const albumEntry = { ...formData, cover: autoCover };
 
     try {
-    const response = await fetch("https://your-backend-api.com/save", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(albumEntry),
-    });
+      const response = await fetch(`${API_URL}/api/save`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(albumEntry),
+      });
 
-    if (response.ok) {
-      const savedData = await response.json();
-      // Only update the UI if the database successfully saved the entry
-      setAlbums([...albums, savedData]);
-      closeModal();
-    } else {
-      alert("Failed to save to database");
+      if (response.ok) {
+        const savedAlbum = await response.json();
+        setAlbums([savedAlbum, ...albums]);
+        closeModal();
+      }
+    } catch (err) {
+      console.error("Save error:", err);
     }
-  } catch (error) {
-    console.error("Connection Error:", error);
-  }
-};
-
-  const openEdit = (album) => {
-    setFormData({ 
-      spotifyLink: album.spotifyLink,
-      albumTitle: album.albumTitle, 
-      artist: album.artist, 
-      favSong: album.favSong,
-      rating: album.rating, 
-      comment: album.comment 
-    });
-    setEditingId(album.id);
-    setShowModal(true);
   };
 
-  const deleteAlbum = (id) => {
-    setAlbums(albums.filter(a => a.id !== id));
+  const deleteAlbum = async (mongoId) => {
+    try {
+      const response = await fetch(`${API_URL}/api/albums/${mongoId}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        setAlbums(albums.filter(a => a._id !== mongoId));
+      }
+    } catch (err) {
+      console.error("Delete error:", err);
+    }
+  };
+
+  const openEdit = (album) => {
+    setFormData({ ...album });
+    setEditingId(album._id);
+    setShowModal(true);
   };
 
   const closeModal = () => {
@@ -121,16 +127,16 @@ const SpoCom = () => {
         </nav>
 
         <div className="row g-0 flex-grow-1 w-100 overflow-hidden">
-         <main className="col-md-9 p-4 bg-black overflow-auto custom-scroll" style={{ maxHeight: '100%' }}>
-        <div className="row row-cols-2 row-cols-lg-4 g-4">
+          <main className="col-md-9 p-4 bg-black overflow-auto custom-scroll" style={{ maxHeight: '100%' }}>
+            <div className="row row-cols-2 row-cols-lg-4 g-4">
               {albums.map((album) => (
-                <div className="col" key={album.id}>
+                <div className="col" key={album._id}>
                   <div className="album-item bg-dark border border-secondary p-3 text-white text-center position-relative">
                     <div className="img-container position-relative mb-2">
                       <img src={album.cover} alt="cover" className="img-fluid grayscale" />
                       <div className="hover-overlay d-flex flex-column gap-2 justify-content-center align-items-center">
                         <button className="btn btn-sm btn-light fw-bold w-75" onClick={() => openEdit(album)}>EDIT</button>
-                        <button className="btn btn-sm btn-danger fw-bold w-75" onClick={() => deleteAlbum(album.id)}>DEL</button>
+                        <button className="btn btn-sm btn-danger fw-bold w-75" onClick={() => deleteAlbum(album._id)}>DEL</button>
                       </div>
                     </div>
                     <h6 className="mb-0 fw-bold text-truncate">{album.albumTitle}</h6>
@@ -152,7 +158,7 @@ const SpoCom = () => {
             <h6 className="fw-black border-bottom border-secondary pb-2 mb-3 uppercase">Recent Reviews</h6>
             <div className="reviews-scroll-area flex-grow-1 custom-scroll">
               {albums.map(a => (
-                <div key={a.id} className="review-box mb-4 pb-3 border-bottom border-secondary">
+                <div key={a._id} className="review-box mb-4 pb-3 border-bottom border-secondary">
                   <h6 className="fw-bold mb-1 text-uppercase text-white">{a.albumTitle}</h6>
                   <p className="small text-secondary mb-1">Favorite Track: <span className="text-white italic">{a.favSong}</span></p>
                   <p className="small lh-sm text-light font-serif">COMMENT: "{a.comment}"</p>
