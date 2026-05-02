@@ -17,7 +17,7 @@ const SpoCom = () => {
     comment: "" 
   });
 
-  const API_URL = "YOUR_DEPLOYED_BACKEND_URL"; // Update this!
+  const API_URL = "https://backend-spocom.onrender.com"; // Update this!
 
   // Fetch data on Login
   useEffect(() => {
