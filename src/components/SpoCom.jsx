@@ -21,12 +21,7 @@ const SpoCom = () => {
     comment: "" 
   });
 
-<<<<<<< HEAD
-  // Updated to match your backend port
   const API_URL = "http://localhost:5000"; 
-=======
-  const API_URL = "https://backend-spocom.onrender.com"; // Update this!
->>>>>>> 5a9def06eff7b8b605c69686338cc1c821f84431
 
   // Fetch only the albums belonging to the specific logged-in userId
   useEffect(() => {
