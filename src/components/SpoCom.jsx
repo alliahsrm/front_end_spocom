@@ -21,7 +21,7 @@ const SpoCom = () => {
     comment: "" 
   });
 
-  const API_URL = "http://localhost:5000"; 
+  const API_URL = "https://ars-backend-egp4.onrender.com"; 
 
   // Fetch only the albums belonging to the specific logged-in userId
   useEffect(() => {
